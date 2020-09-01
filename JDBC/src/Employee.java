@@ -8,9 +8,9 @@ public class Employee implements UserDAO {
 	private String first_name;
 	private String email;
 	private String department;
-	private double salary;
+	private float salary;
 	
-	public Employee(int id, String last_name, String first_name, String email, String department, double salary) {
+	public Employee(int id, String last_name, String first_name, String email, String department, float salary) {
 		super();
 		this.id = id;
 		this.last_name = last_name;
@@ -50,11 +50,11 @@ public class Employee implements UserDAO {
 		this.department = department;
 	}
 
-	public double getSalary() {
+	public float getSalary() {
 		return salary;
 	}
 
-	public void setSalary(double salary) {
+	public void setSalary(float salary) {
 		this.salary = salary;
 	}
 
@@ -66,7 +66,7 @@ public class Employee implements UserDAO {
 		employee.setFirst_name(rs.getString("first_name"));
 		employee.setEmail(rs.getString("email"));
 		employee.setDepartment(rs.getString("department"));
-		employee.setSalary(rs.getDouble("salary"));
+		employee.setSalary(rs.getFloat("salary"));
 		System.out.println(employee.getFirst_name() + "\t" + employee.getLast_name() + "\t" + employee.getEmail() + "\t"
 				+ employee.getDepartment() + "\t" + employee.getSalary());
 		return employee;
@@ -111,7 +111,7 @@ public class Employee implements UserDAO {
 			ps.setString(2, employee.getFirst_name());
 			ps.setString(3, employee.getEmail());
 			ps.setString(4, employee.getDepartment());
-			ps.setDouble(5, employee.getSalary());
+			ps.setFloat(5, employee.getSalary());
 			int i = ps.executeUpdate();
 			if (i == 1) {
 				return true;
@@ -130,7 +130,7 @@ public class Employee implements UserDAO {
 	        ps.setString(2, employee.getFirst_name());
 	        ps.setString(3, employee.getEmail());
 	        ps.setString(4, employee.getDepartment());
-	        ps.setDouble(5, employee.getSalary());
+	        ps.setFloat(5, employee.getSalary());
 	        ps.setInt(6, employee.getId());
 	        int i = ps.executeUpdate();
 	      if(i == 1) {
@@ -142,4 +142,17 @@ public class Employee implements UserDAO {
 	    return false;
 	}
 
+	public boolean deleteEmployee(int id) {
+		Connection connection = ConnectionFactory.getConnection();
+		try {
+			Statement stmt = connection.createStatement();
+			int i = stmt.executeUpdate("DELETE FROM employees WHERE id=" + id);
+			if (i == 1) {
+				return true;
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		return false;
+	}
 }

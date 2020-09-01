@@ -5,4 +5,5 @@ public interface UserDAO {
     Employee getEmployee(int id);
     boolean insertEmployee(Employee employee);
     boolean updateEmployee(Employee employee);
+    boolean deleteEmployee(int id);
 }
