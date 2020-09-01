@@ -4,17 +4,17 @@ import java.util.Set;
 
 public class Employee implements UserDAO {
 	private int id;
-	private String first_name;
 	private String last_name;
+	private String first_name;
 	private String email;
 	private String department;
 	private double salary;
 	
-	public Employee(int id, String first_name, String last_name, String email, String department, double salary) {
+	public Employee(int id, String last_name, String first_name, String email, String department, double salary) {
 		super();
 		this.id = id;
-		this.first_name = first_name;
 		this.last_name = last_name;
+		this.first_name = first_name;
 		this.email = email;
 		this.department = department;
 		this.salary = salary;
@@ -59,11 +59,11 @@ public class Employee implements UserDAO {
 	}
 
 	private Employee extractEmployeeFromResultSet(ResultSet rs) throws SQLException {
-		Employee employee = new Employee(id, first_name, last_name, email, department, salary);
+		Employee employee = new Employee(id, last_name, first_name, email, department, salary);
 
 		employee.setId(rs.getInt("id"));
-		employee.setFirst_name(rs.getString("first_name"));
 		employee.setLast_name(rs.getString("last_name"));
+		employee.setFirst_name(rs.getString("first_name"));
 		employee.setEmail(rs.getString("email"));
 		employee.setDepartment(rs.getString("department"));
 		employee.setSalary(rs.getDouble("salary"));
@@ -107,8 +107,8 @@ public class Employee implements UserDAO {
 		Connection connection = ConnectionFactory.getConnection();
 		try {
 			PreparedStatement ps = connection.prepareStatement("INSERT INTO employees VALUES (NULL, ?, ?, ?, ?, ?)");
-			ps.setString(1, employee.getFirst_name());
-			ps.setString(2, employee.getLast_name());
+			ps.setString(1, employee.getLast_name());
+			ps.setString(2, employee.getFirst_name());
 			ps.setString(3, employee.getEmail());
 			ps.setString(4, employee.getDepartment());
 			ps.setDouble(5, employee.getSalary());
@@ -122,5 +122,24 @@ public class Employee implements UserDAO {
 		return false;
 	}
 	
+	public boolean updateEmployee(Employee employee) {
+	    Connection connection = ConnectionFactory.getConnection();
+	    try {
+	        PreparedStatement ps = connection.prepareStatement("UPDATE employees SET last_name=?, first_name=?, email=?, department=?, salary=? WHERE id=?");
+	        ps.setString(1, employee.getLast_name());
+	        ps.setString(2, employee.getFirst_name());
+	        ps.setString(3, employee.getEmail());
+	        ps.setString(4, employee.getDepartment());
+	        ps.setDouble(5, employee.getSalary());
+	        ps.setInt(6, employee.getId());
+	        int i = ps.executeUpdate();
+	      if(i == 1) {
+	    return true;
+	      }
+	    } catch (SQLException ex) {
+	        ex.printStackTrace();
+	    }
+	    return false;
+	}
 
 }
